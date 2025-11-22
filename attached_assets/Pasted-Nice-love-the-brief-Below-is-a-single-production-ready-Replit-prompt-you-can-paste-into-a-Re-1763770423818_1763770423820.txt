@@ -1,0 +1,263 @@
+Nice — love the brief. Below is a **single, production-ready Replit prompt** you can paste into a Replit AI / Project request or give to an engineer/designer to build the full marketing + customer-facing site for **Kintsu.io** (to be hosted on Hostinger). It’s exhaustive (visual system, messaging, pages, accessibility, dark mode, chatbot, employer/job-posting flow, deployment notes), and tuned to beat the top-three competitors by focusing on clarity, trust, and elegant Kintsugi-inspired visuals.
+
+You can copy the whole block below and paste it into Replit or hand it to a frontend engineer as the spec.
+
+---
+
+# 🎯 Final Replit Prompt — Build Kintsu.io Marketing & App Site (Hostinger)
+
+ROLE: Act as a Senior UI/UX Designer and Frontend Developer who ships production-ready, accessible, mobile-first landing pages and small static site apps (examples: TikTok-style onboarding, WhatsApp-like simplicity, Temu-grade commerce clarity).
+
+TASK: Build a responsive, multi-page marketing & customer-facing site for **Kintsu.io** (static site deploy to Hostinger). Use **HTML5 + TailwindCSS (CDN)** and minimal, modular JavaScript. Create one `index.html` plus additional static pages (app, employers, pricing, about, jobs) — all mobile-first and pixel-perfect. Deliverables include code, assets, and a Hostinger-ready ZIP with instructions.
+
+USE THE BRAND GUIDELINES BELOW (copy & implement exactly).
+
+---
+
+## 1) Brand Identity & Positioning
+
+* **Name:** Kintsu.io
+* **Archetype:** The Restorative Craftsman — transforms setbacks into refined strengths using expert tooling (AI) + human touch (future).
+* **One-Line Position Statement:** Transform career setbacks into golden opportunities with AI-powered career repair.
+* **Primary Tagline:** Polish Your Career Path. (from brand audit). 
+* **Secondary Tagline:** Rebuild. Refine. Rise.
+
+---
+
+## 2) Core Messaging Pillars (use these as primary copy sections)
+
+* **Pillar 1 — Repair with Precision:** AI-powered resume tailoring, ATS-optimized applications, and role-fit recommendations that *actually* improve interview rates.
+* **Pillar 2 — Learn & Level Up:** Interview coaching, salary negotiation guidance, and structured progress tracking.
+* **Pillar 3 — Trusted, Honest Results:** Transparent claims, clear benchmarks, and privacy-first data handling.
+
+---
+
+## 3) How to Present “AI” (copy rules & phrasing)
+
+**The rule:** Be accurate, human-centered, and benefit-driven. Avoid technical hype; emphasize outcomes and honesty.
+**Messaging:** "AI-powered" → "AI-assisted" where claiming human-equivalent results is premature. Use exact phrasing examples:
+
+* Good: “AI-powered resume tailoring that produces ATS-friendly, role-specific bullets in seconds.”
+* Safer: “Instant career guidance powered by Kintsu’s AI — answers, tailored resumes, and interview practice.”
+  **Phrasing examples to avoid:** “Replace human coaches” / any multiplier claim without data. If you use claim multipliers, append: “based on internal benchmarks.” 
+
+---
+
+## 4) Visual Cues & UX Rules
+
+**Color Palette (design tokens):**
+
+* Indigo (primary): `#0B1B3A`
+* Warm Gold (accent): `#C5A95A`
+* Soft Sand (background light): `#FAF7F2`
+* Graphite (text): `#1F2937`
+* Muted Gray (UI): `#9CA3AF`
+
+**Typography:**
+
+* Headings: Inter / Poppins (600–800 weight)
+* Body: Inter / Roboto (400–500)
+* Small/UI: 14px / 0.875rem base
+
+**Headings:** Bold, slightly condensed, left-aligned on large screens.
+**Body:** Generous line-height (1.6), 16px base on mobile.
+**Visual Style:** Minimalist, premium, tactile — combine deep indigo backgrounds with gold highlights that mimic kintsugi seams (thin gold lines as separators, not gaudy). Use soft glass panels for CTA cards.
+**Imagery:** Combine editorial portraits (diverse professionals), close-up textures of repaired pottery (kintsugi), and clean UI device mockups. Use duotone overlays (indigo + gold) for hero images.
+
+**Micro-interactions & Motion:** Subtle scale + fade on CTAs; 80–150ms microdelays; avoid motion that triggers vestibular issues.
+
+---
+
+## 5) Brand Architecture & Product Naming
+
+* **Core Product:** Kintsu (web app) — public site points to app.kintsu.io.
+* **Tiers:** Starter, Professional, Executive (clear feature bullets). Use the Kintsu-themed language in pricing (Starter = “Begin your golden repair”). 
+* **Add-ons:** Resume Tailor Pro (one-time), LinkedIn Optimization (coming soon), Enterprise (waitlist).
+* **Employer Product:** Employers Portal — allow companies to post jobs (initially via form + mailto or webhook).
+
+---
+
+## 6) Trust Signals & Technical Positioning (site sections)
+
+* **Why Kintsu:** Block with 3 icons: (1) "Proven AI tailoring" (2) "Privacy-first" (3) "Real outcomes". For any numeric claim, add a footnote with "internal benchmarks".
+* **Who We Are:** short founder story, mission, link to whitepaper / methodology page.
+* **Security & Privacy:** short bullets — SOC/ISO mention when available, GDPR/CCPA compliance, encryption at rest.
+* **Methodology:** Transparent short page describing how resume tailoring and job-matching works (high-level). Add “read our benchmarks” CTA.
+* **Social Proof:** logos of customers/press (if available), anonymized stats, testimonials (with headshot + role + company).
+* **Legal & Accessibility:** link to privacy, terms, accessibility statement.
+
+---
+
+## 7) Launch Messaging (Hero / above-the-fold)
+
+**Hero Headline (example):** Transform your career setbacks into golden opportunities.
+**Sub-headline:** Instant resume tailoring, AI coaching, and job-match recommendations — built to help you get interviews faster.
+**Primary CTA:** Start 14-Day Pro Trial (Email + CC capture)
+**Secondary CTA:** View Pricing & Features
+**Microcopy:** “No credit card required” OR “Credit card required” depending on trial policy — recommended: credit card required for 14-day Pro trial to increase signups (see product doc). 
+
+---
+
+## 8) Pages to build (minimum)
+
+1. **/ (Home)** — Hero, pillars, features, trust, pricing preview, testimonials, footer.
+2. **/app** — Product overview + in-page device mockups + login CTA → app.kintsu.io.
+3. **/pricing** — tier comparison, annual toggle, CTA to signup.
+4. **/employers** — employer landing + job-post form + employer pricing & benefits (like indeed.com style but simpler). Employer job posting flows: POST to webhook or mailto fallback.
+5. **/jobs** — public job board (static /jobs.json initially with client-side filtering). Each job `jobs/{slug}.html`.
+6. **/about** — team + mission + deep kintsugi story (see copy below).
+7. **/legal** — privacy, terms, accessibility.
+8. **/blog** (optional) — static blog template for SEO.
+
+---
+
+## 9) Employer Page + Job Posting Flow
+
+* **Employer landing:** Benefits, pricing, customer logos.
+* **Post a Job:** Form fields: company name, role title, location (remote toggle), salary range, job description (WYSIWYG or textarea), contact email, company website, logo upload (optional).
+* **Submit behavior:** Initially `mailto:employers@kintsu.io` with preformatted subject + body; provide a webhook URL placeholder for future integration. Show a “Thank you — job posted” UI and admin email notification.
+* **Job moderation:** Admin review note (job enters "pending"). Explain moderation on the page.
+
+---
+
+## 10) Accessibility & Dark Mode
+
+* **Contrast:** Ensure WCAG AA contrast for all text; hero text meets WCAG AAA where possible.
+* **Keyboard:** All interactive elements keyboard-focusable; visible focus states (gold outline).
+* **ARIA:** Use `aria-labels`, `role="navigation"`, `aria-live` for toast notifications.
+* **Dark Mode:** Toggle stored in `localStorage`; use CSS variables for colors, automatically follow `prefers-color-scheme`. Ensure gold accents remain visible in dark mode (tweak to slightly lighter gold on dark backgrounds).
+* **Motion:** Respect `prefers-reduced-motion`. All animations optional.
+
+---
+
+## 11) Chatbot & Contact
+
+* **Chatbot placeholder:** Add a floating chat button bottom-right that links to `https://app.kintsu.io/chatbot` or injects a snippet when available. Implement a minimal local JS-driven fallback chatbot that opens a mailto or small FAQ modal while the real bot is loading.
+* **Contact form:** Visual form uses `mailto:contact@kintsu.io` for MVP. Add validations and honeypot to reduce spam.
+
+---
+
+## 12) SEO, Analytics & Technical Requirements
+
+* **Meta:** Proper meta tags for OG (title, description, image), Twitter cards, canonical links.
+* **Sitemap:** `sitemap.xml` generator script stub.
+* **Robots:** `robots.txt`.
+* **Analytics:** Placeholder for Google Analytics / Matomo snippet and for first-party event tracking.
+* **Hosting:** single static bundle to deploy to Hostinger. Provide deploy README with steps (zip → upload to Hostinger File Manager → set domain → enable HTTPS using Hostinger’s Let’s Encrypt).
+* **Performance:** Use optimized images (WebP), lazy load images, preconnect to fonts/CDNs.
+
+---
+
+## 13) UI Component List (deliver in code)
+
+* Header (logo, nav, CTA, mobile hamburger)
+* Hero (headline, sub-copy, 2 CTAs, hero visual)
+* Feature cards (3–4)
+* Pricing table (responsive)
+* Testimonials carousel (accessible)
+* Employer job-listing / cards with filter tags
+* Footer (links, small newsletter signup)
+* Floating Chat + Dark Mode toggle
+* Accessible modal (Contact / Post Job)
+* Microcopy style tokens
+
+---
+
+## 14) Copy — Kintsugi Philosophy & Story (use on About page & hero microcopy)
+
+**Kintsugi story short copy (for About):**
+
+> Kintsugi is the Japanese art of repairing broken pottery with gold lacquer — a philosophy that celebrates damage and renewal. At Kintsu, we borrow that spirit: we help professionals transform career setbacks into stronger, more beautiful trajectories. Instead of hiding breaks, we fill them with gold — new skills, sharper resumes, and smarter applications — so the final piece is more valuable than it was before.
+
+Use this story near the “Why Kintsu” block, paired with a close-up image of kintsugi pottery and a subtle gold seam running horizontally through the hero background.
+
+---
+
+## 15) UX Copy Examples (microcopy)
+
+* Onboarding CTA: “Upload resume — get your first tailored draft in 60s” (if accurate)
+* Pricing justification tooltip: “Includes Resume Tailor Pro & 14-day Pro Trial”
+* Job posting CTA: “Post job — employers typically see interviews within 2–4 weeks” (only if you can validate later; otherwise use “employer interest” wording)
+
+---
+
+## 16) Legal / Honest Marketing Notes (must appear on site)
+
+* For any “x times faster” claims add footnote: “Based on internal benchmarks — see methodology.” 
+* Avoid implying human coaches when none exist. Use “AI-powered coaching”; label any human coach options clearly as “Coming soon”.
+
+---
+
+## 17) Implementation & Code Requirements (explicit)
+
+* Use **single `index.html`** as entry for home; generate `/app.html`, `/pricing.html`, `/employers.html`, `/about.html`, `/jobs.html` as static pages.
+* **Tailwind via CDN** for prototyping (include `@tailwind` directives or CDN link). Use utility classes only – keep custom CSS minimal and inlined to a small `styles.css`.
+* JS: Vanilla ES6 modular functions for mobile nav, dark-mode toggle, simple client-side job filtering, and contact mailto fallback. No heavy frameworks required.
+* Accessibility: Provide keyboard navigation, visible focus, semantic HTML.
+* Provide `assets/` folder: optimized hero images, logo SVG, favicon, kintsugi texture PNG/WebP.
+* Add `README.md` with Hostinger deployment steps and environment notes.
+
+---
+
+## 18) Design + Delivery Checklist (what Replit must produce)
+
+* [ ] Fully responsive markup & Tailwind CSS implementation.
+* [ ] All pages listed delivered (`index.html`, `app.html`, `pricing.html`, `employers.html`, `about.html`, `jobs.html`, legal pages).
+* [ ] Mobile & desktop hero mockups (PNG or SVG) and exported assets.
+* [ ] Interactive dark-mode toggle & accessible chat placeholder.
+* [ ] Employer job-post form that POSTs to a webhook (configurable) and a mailto fallback.
+* [ ] Static `jobs.json` and search UI for job board.
+* [ ] README: how to deploy to Hostinger, update domain, enable HTTPS, replace placeholders (analytics, webhook).
+* [ ] Small style guide file: color tokens, fonts, spacing tokens, CTA sizes (for future devs).
+
+---
+
+## 19) Launch Messaging Examples (short snippets for hero + email)
+
+* **Hero:** “Polish Your Career Path — AI-assisted resume tailoring, interview coaching, and job-matching that helps you land interviews faster.”
+* **Pre-launch email subject:** “Kintsu is live — Turn career breaks into golden outcomes”
+* **On-site CTA:** “Start 14-Day Pro Trial” / smaller: “Try Resume Tailor Pro — $0 for the first trial.”
+
+---
+
+## 20) Extra: Small code skeleton (copy/paste-ready note)
+
+Include this in the Replit repo root `README.md`:
+
+```
+- index.html
+- app.html
+- pricing.html
+- employers.html
+- about.html
+- jobs.html
+- assets/
+  - img/
+  - logo.svg
+  - kintsugi-texture.webp
+- styles.css
+- scripts/
+  - main.js
+  - darkmode.js
+  - jobboard.js
+- jobs.json
+- README.md (deploy instructions for Hostinger)
+```
+
+---
+
+## 21) Final design brief to paste into Replit (compact version)
+
+Use this exact copy to paste into Replit as the project prompt:
+
+> Build a mobile-first, responsive marketing and customer-facing site for **Kintsu.io** using HTML5 + TailwindCSS (CDN) and minimal JavaScript. The site will be deployed to Hostinger. Implement the pages: Home, App, Pricing, Employers (job-posting flow), Jobs (public board), About (kintsugi story), Legal. Use the brand system: Indigo `#0B1B3A`, Gold `#C5A95A`, Sand `#FAF7F2`. Include dark mode, keyboard-accessible navigation, floating chat placeholder, and an employer job-post form that uses mailto fallback and a configurable webhook. Provide assets, README with Hostinger deploy steps, and optimized images. Copy tone: premium, restorative, honest. Avoid overclaims — any multiplier claim must be footnoted as internal benchmark. Deliver full static site zip and a README with deployment instructions.
+
+---
+
+If you want, I can now:
+
+1. Generate the **index.html + Tailwind markup** skeleton (fully coded) and include the dark-mode toggle + accessible chat placeholder, or
+2. Produce wireframe artboards (desktop + mobile) for the homepage and employer page, or
+3. Create copy variations for hero / pricing CTAs optimized for conversion testing.
+
+Which of the three shall I build for you right now? (I’ll directly produce code or wireframes in the next message.)
