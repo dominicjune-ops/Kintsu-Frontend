@@ -1,81 +1,37 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { JobCard } from "@/components/JobCard";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
-
-// TODO: remove mock functionality
-const mockJobs = [
-  {
-    id: "1",
-    title: "Senior Product Manager",
-    company: "TechVision Inc",
-    location: "San Francisco, CA",
-    salary: "$140k - $180k",
-    type: "Full-time",
-    tags: ["Product", "SaaS", "Remote OK"],
-    description: "Lead product strategy for our enterprise SaaS platform. Work with engineering and design to ship features that delight customers."
-  },
-  {
-    id: "2",
-    title: "Frontend Engineer",
-    company: "Startup Labs",
-    location: "Remote",
-    salary: "$120k - $160k",
-    type: "Full-time",
-    tags: ["React", "TypeScript", "Remote"],
-    description: "Build beautiful, performant user interfaces with React and TypeScript. Join a fast-growing startup building the future of work."
-  },
-  {
-    id: "3",
-    title: "Data Scientist",
-    company: "Analytics Co",
-    location: "New York, NY",
-    salary: "$130k - $170k",
-    type: "Full-time",
-    tags: ["Python", "ML", "Analytics"],
-    description: "Apply machine learning to solve complex business problems. Work with large datasets and cutting-edge ML tools."
-  },
-  {
-    id: "4",
-    title: "DevOps Engineer",
-    company: "CloudScale",
-    location: "Austin, TX",
-    salary: "$125k - $165k",
-    type: "Full-time",
-    tags: ["AWS", "Kubernetes", "Remote OK"],
-    description: "Build and maintain cloud infrastructure at scale. Automate everything and help teams ship faster."
-  },
-  {
-    id: "5",
-    title: "UX Designer",
-    company: "DesignFirst",
-    location: "Remote",
-    salary: "$110k - $145k",
-    type: "Full-time",
-    tags: ["Figma", "User Research", "Remote"],
-    description: "Design delightful experiences for our mobile and web applications. Conduct user research and iterate based on feedback."
-  }
-];
+import type { Job } from "@shared/schema";
 
 export default function Jobs() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  const allTags = Array.from(
-    new Set(mockJobs.flatMap(job => job.tags))
-  );
-
-  const filteredJobs = mockJobs.filter(job => {
-    const matchesSearch = searchQuery === "" || 
-      job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.location.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesTag = !selectedTag || job.tags.includes(selectedTag);
-    
-    return matchesSearch && matchesTag;
+  const { data: jobs = [], isLoading } = useQuery<Job[]>({
+    queryKey: ["/api/jobs"],
   });
+
+  const allTags = useMemo(() => {
+    return Array.from(
+      new Set(jobs.flatMap(job => job.tags || []))
+    );
+  }, [jobs]);
+
+  const filteredJobs = useMemo(() => {
+    return jobs.filter(job => {
+      const matchesSearch = searchQuery === "" || 
+        job.roleTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        job.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        job.location.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesTag = !selectedTag || (job.tags && job.tags.includes(selectedTag));
+      
+      return matchesSearch && matchesTag;
+    });
+  }, [jobs, searchQuery, selectedTag]);
 
   const handleApply = (jobId: string) => {
     console.log(`Applying to job ${jobId}`);
@@ -131,11 +87,21 @@ export default function Jobs() {
         </div>
 
         <div className="space-y-4">
-          {filteredJobs.length > 0 ? (
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Loading jobs...</p>
+            </div>
+          ) : filteredJobs.length > 0 ? (
             filteredJobs.map((job) => (
               <JobCard
                 key={job.id}
-                {...job}
+                title={job.roleTitle}
+                company={job.companyName}
+                location={job.location}
+                salary={job.salaryRange}
+                type={job.type}
+                tags={job.tags || []}
+                description={job.jobDescription}
                 onApply={() => handleApply(job.id)}
               />
             ))

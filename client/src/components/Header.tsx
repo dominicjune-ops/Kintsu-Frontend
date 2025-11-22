@@ -19,27 +19,27 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-        <Link href="/" data-testid="link-home">
-          <a className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1">
+        <Link href="/">
+          <div className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1 cursor-pointer" data-testid="link-home">
             <div className="text-2xl font-bold font-serif bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Kintsu.io
             </div>
-          </a>
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href}>
-              <a
+              <div
                 data-testid={`link-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors hover-elevate active-elevate-2 ${
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors hover-elevate active-elevate-2 cursor-pointer ${
                   location === item.href
                     ? "bg-accent/10 text-accent-foreground"
                     : "text-muted-foreground"
                 }`}
               >
                 {item.label}
-              </a>
+              </div>
             </Link>
           ))}
         </nav>
@@ -73,17 +73,17 @@ export function Header() {
           <nav className="container mx-auto flex flex-col p-4 gap-2">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <a
+                <div
                   onClick={() => setMobileMenuOpen(false)}
                   data-testid={`link-mobile-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                  className={`block px-4 py-3 rounded-md text-sm font-medium hover-elevate active-elevate-2 ${
+                  className={`block px-4 py-3 rounded-md text-sm font-medium hover-elevate active-elevate-2 cursor-pointer ${
                     location === item.href
                       ? "bg-accent/10 text-accent-foreground"
                       : "text-muted-foreground"
                   }`}
                 >
                   {item.label}
-                </a>
+                </div>
               </Link>
             ))}
             <Button

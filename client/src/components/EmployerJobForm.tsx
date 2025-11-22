@@ -52,32 +52,42 @@ export function EmployerJobForm() {
 
   const onSubmit = async (data: JobPostFormData) => {
     setIsSubmitting(true);
-    // TODO: remove mock functionality
-    console.log("Job posting submission:", data);
+    
+    try {
+      // Generate tags from the job description (basic extraction)
+      const tags: string[] = [];
+      if (data.isRemote) tags.push("Remote");
+      tags.push("Full-time"); // Default for now
+      
+      const response = await fetch("/api/jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...data,
+          tags,
+          type: "Full-time"
+        })
+      });
 
-    // Mailto fallback with webhook placeholder for future
-    const emailBody = `
-Company: ${data.companyName}
-Role: ${data.roleTitle}
-Location: ${data.location}${data.isRemote ? " (Remote)" : ""}
-Salary: ${data.salaryRange}
-Website: ${data.companyWebsite || "N/A"}
-Contact: ${data.contactEmail}
+      if (!response.ok) {
+        throw new Error("Failed to submit job posting");
+      }
 
-Description:
-${data.jobDescription}
-    `;
+      toast({
+        title: "Job posted successfully!",
+        description: "Your job posting is under review. We'll notify you once it's live.",
+      });
 
-    const mailtoLink = `mailto:employers@kintsu.io?subject=Job Posting: ${encodeURIComponent(data.roleTitle)}&body=${encodeURIComponent(emailBody)}`;
-    window.location.href = mailtoLink;
-
-    toast({
-      title: "Job posted successfully!",
-      description: "Your job posting is under review. We'll notify you once it's live.",
-    });
-
-    form.reset();
-    setIsSubmitting(false);
+      form.reset();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to submit job posting. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
