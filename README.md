@@ -1,4 +1,4 @@
-# Kintsu.io - Career Transformation Platform
+# Kintsu - Career Transformation Platform
 
 Transform career setbacks into golden opportunities with AI-powered career tools.
 
@@ -145,4 +145,4 @@ Required environment variables (automatically configured on Replit):
 
 ## License
 
-Private - Kintsu.io © 2025
+Private - Kintsu © 2025
