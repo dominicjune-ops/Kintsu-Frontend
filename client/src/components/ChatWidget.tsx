@@ -83,7 +83,9 @@ export function ChatWidget() {
 
     try {
       // Call backend API
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
+      // In production: /api/chat (same origin, no CORS)
+      // In development: http://localhost:3001/api/chat (local server)
+      const apiUrl = import.meta.env.VITE_API_URL || "";
       const response = await fetch(`${apiUrl}/api/chat`, {
         method: "POST",
         headers: {
