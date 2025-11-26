@@ -43,7 +43,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-4">
             <div className="text-2xl font-bold font-serif bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Kintsu.io
+              Kintsu
             </div>
             <p className="text-sm text-muted-foreground">
               Transform your career setbacks into golden opportunities.
@@ -119,7 +119,7 @@ export function Footer() {
         </div>
 
         <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>&copy; 2025 Kintsu.io. All rights reserved.</p>
+          <p>&copy; 2025 Kintsu. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/legal/privacy">
               <a className="hover:text-accent transition-colors" data-testid="link-footer-privacy">

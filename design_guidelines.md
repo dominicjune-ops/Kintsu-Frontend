@@ -1,4 +1,4 @@
-# Kintsu.io Design Guidelines
+# Kintsu Design Guidelines
 
 ## Design Approach
 **Reference-Based**: Draw inspiration from premium SaaS platforms (Linear, Stripe) combined with kintsugi-inspired artisanal craftsmanship. Balance minimalist precision with warm, restorative visual language.

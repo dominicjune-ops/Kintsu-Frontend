@@ -286,3 +286,7 @@
     inset: -1px;
   }
 }
+
+html, body {
+  direction: ltr !important;
+}

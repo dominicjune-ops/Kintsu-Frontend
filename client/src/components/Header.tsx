@@ -22,7 +22,7 @@ export function Header() {
         <Link href="/">
           <div className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1 cursor-pointer" data-testid="link-home">
             <div className="text-2xl font-bold font-serif bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Kintsu.io
+              Kintsu
             </div>
           </div>
         </Link>
@@ -52,7 +52,7 @@ export function Header() {
             className="hidden md:inline-flex"
             data-testid="button-start-trial"
           >
-            <a href="https://app.kintsu.io">Start Free Trial</a>
+            <a href="https://app.kintsu">Start Free Trial</a>
           </Button>
           
           <Button
@@ -92,7 +92,7 @@ export function Header() {
               className="mt-2"
               data-testid="button-mobile-start-trial"
             >
-              <a href="https://app.kintsu.io">Start Free Trial</a>
+              <a href="https://app.kintsu">Start Free Trial</a>
             </Button>
           </nav>
         </div>
