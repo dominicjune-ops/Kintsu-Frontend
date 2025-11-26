@@ -31,10 +31,12 @@ export function Hero() {
               className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8"
               data-testid="button-hero-start-trial"
             >
-              <a href="https://app.kintsu.io">
-                Start 14-Day Pro Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
+              <Link href="/app/onboarding">
+                <a>
+                  Start 14-Day Pro Trial
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </a>
+              </Link>
             </Button>
             <Button
               asChild
