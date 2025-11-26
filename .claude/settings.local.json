@@ -8,7 +8,15 @@
       "Bash(identify:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(mcp list-tools)",
+      "Bash(env)",
+      "Bash(echo:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(dir /s /b *.py)",
+      "Bash(python -c:*)",
+      "Bash(nslookup:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
