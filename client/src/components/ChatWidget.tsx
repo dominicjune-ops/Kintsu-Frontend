@@ -82,19 +82,20 @@ export function ChatWidget() {
     setKintoState("thinking");
 
     try {
-      // Call backend API
-      // In production: /api/chat (same origin, no CORS)
-      // In development: http://localhost:3001/api/chat (local server)
-      const apiUrl = import.meta.env.VITE_API_URL || "";
-      const response = await fetch(`${apiUrl}/api/chat`, {
+      // Call Python backend API at api.kintsu.io
+      // Production: https://api.kintsu.io/api/v1/ai/chat
+      // Development: Can use local backend if needed
+      const apiUrl = import.meta.env.VITE_API_URL || "https://api.kintsu.io";
+      const response = await fetch(`${apiUrl}/api/v1/ai/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           message: inputValue,
+          coaching_type: "general",
+          session_id: generateSessionId(),
           context: {
-            session_id: generateSessionId(),
             user_id: "user_demo",
             page: window.location.pathname,
             user_profile: {
@@ -103,7 +104,6 @@ export function ChatWidget() {
               career_goal: "promotion",
             },
           },
-          session_id: generateSessionId(),
         }),
       });
 
