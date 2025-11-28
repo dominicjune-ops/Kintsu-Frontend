@@ -1,26 +1,26 @@
 /**
- * Authentication hook with session linking integration
- * Replace with actual Supabase auth implementation when ready
+ * Authentication hook with Supabase integration and session linking
  */
 
 import { useState, useEffect } from 'react';
+import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js';
 import { linkSessionToUser, isSessionLinked } from '../lib/session-linking';
 
-interface User {
-  id: string;
-  email: string;
-  // Add other user properties as needed
-}
+// Supabase configuration
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
+
+const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 
 interface AuthState {
   user: User | null;
+  session: Session | null;
   loading: boolean;
   sessionLinked: boolean;
 }
 
 /**
- * Example authentication hook
- * Replace this with actual Supabase auth when implemented
+ * Authentication hook with real Supabase integration
  */
 export function useAuth(): AuthState & {
   signIn: (email: string, password: string) => Promise<void>;
@@ -29,66 +29,60 @@ export function useAuth(): AuthState & {
   linkCurrentSession: () => Promise<boolean>;
 } {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [sessionLinked, setSessionLinked] = useState(false);
 
   // Check for existing session on mount
   useEffect(() => {
-    checkAuthState();
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+
+      if (session?.access_token) {
+        checkSessionLinkStatus(session.access_token);
+      }
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+
+        if (event === 'SIGNED_IN' && session?.access_token) {
+          // Link session after successful sign in
+          const linked = await linkSessionToUser(session.access_token);
+          setSessionLinked(linked);
+        } else if (event === 'SIGNED_OUT') {
+          setSessionLinked(false);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const checkAuthState = async () => {
-    try {
-      // TODO: Replace with actual Supabase auth check
-      // const { data: { session } } = await supabase.auth.getSession();
-
-      // For now, check localStorage (replace with real auth)
-      const savedUser = localStorage.getItem('kintsu_user');
-      if (savedUser) {
-        const userData = JSON.parse(savedUser);
-        setUser(userData);
-
-        // Check if session is linked
-        const linked = await isSessionLinked(userData.accessToken);
-        setSessionLinked(linked);
-      }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-    } finally {
-      setLoading(false);
-    }
+  const checkSessionLinkStatus = async (accessToken: string) => {
+    const linked = await isSessionLinked(accessToken);
+    setSessionLinked(linked);
   };
 
   const signIn = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // TODO: Replace with actual Supabase sign in
-      // const { data, error } = await supabase.auth.signInWithPassword({
-      //   email,
-      //   password
-      // });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-      // Mock successful login for now
-      const mockUser: User = {
-        id: 'user_' + Date.now(),
-        email
-      };
+      if (error) throw error;
 
-      const mockToken = 'mock_jwt_token_' + Date.now();
-
-      // Store user data
-      localStorage.setItem('kintsu_user', JSON.stringify({
-        ...mockUser,
-        accessToken: mockToken
-      }));
-
-      setUser(mockUser);
-
-      // Link the current chat session to the user
-      const linked = await linkSessionToUser(mockToken);
-      setSessionLinked(linked);
-
-      console.log('User signed in and session linked:', linked);
+      // Session linking is handled in the auth state change listener
+      console.log('User signed in successfully');
     } catch (error) {
       console.error('Sign in failed:', error);
       throw error;
@@ -100,32 +94,15 @@ export function useAuth(): AuthState & {
   const signUp = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // TODO: Replace with actual Supabase sign up
-      // const { data, error } = await supabase.auth.signUp({
-      //   email,
-      //   password
-      // });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password
+      });
 
-      // Mock successful signup
-      const mockUser: User = {
-        id: 'user_' + Date.now(),
-        email
-      };
+      if (error) throw error;
 
-      const mockToken = 'mock_jwt_token_' + Date.now();
-
-      localStorage.setItem('kintsu_user', JSON.stringify({
-        ...mockUser,
-        accessToken: mockToken
-      }));
-
-      setUser(mockUser);
-
-      // Link the current chat session to the user
-      const linked = await linkSessionToUser(mockToken);
-      setSessionLinked(linked);
-
-      console.log('User signed up and session linked:', linked);
+      // Note: Email confirmation may be required
+      console.log('User signed up successfully. Check email for confirmation.');
     } catch (error) {
       console.error('Sign up failed:', error);
       throw error;
@@ -136,12 +113,11 @@ export function useAuth(): AuthState & {
 
   const signOut = async () => {
     try {
-      // TODO: Replace with actual Supabase sign out
-      // await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
 
-      localStorage.removeItem('kintsu_user');
-      setUser(null);
       setSessionLinked(false);
+      console.log('User signed out successfully');
     } catch (error) {
       console.error('Sign out failed:', error);
       throw error;
@@ -149,20 +125,16 @@ export function useAuth(): AuthState & {
   };
 
   const linkCurrentSession = async (): Promise<boolean> => {
-    if (!user) return false;
+    if (!session?.access_token) return false;
 
-    const userData = JSON.parse(localStorage.getItem('kintsu_user') || '{}');
-    const accessToken = userData.accessToken;
-
-    if (!accessToken) return false;
-
-    const linked = await linkSessionToUser(accessToken);
+    const linked = await linkSessionToUser(session.access_token);
     setSessionLinked(linked);
     return linked;
   };
 
   return {
     user,
+    session,
     loading,
     sessionLinked,
     signIn,

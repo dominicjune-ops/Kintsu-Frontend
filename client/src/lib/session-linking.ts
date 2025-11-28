@@ -25,13 +25,25 @@ export async function linkSessionToUser(accessToken: string): Promise<boolean> {
   const apiUrl = import.meta.env.VITE_API_URL || "https://api.kintsu.io";
 
   try {
-    const response = await fetch(`${apiUrl}/api/v1/ai/sessions/link`, {
+    // Extract user ID from JWT token (simple decode - in production you might want proper JWT parsing)
+    const tokenPayload = JSON.parse(atob(accessToken.split('.')[1]));
+    const userId = tokenPayload.sub || tokenPayload.user_id;
+
+    if (!userId) {
+      console.error("Could not extract user ID from token");
+      return false;
+    }
+
+    const response = await fetch(`${apiUrl}/api/sessions/link`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`
       },
-      body: JSON.stringify({ session_id: sessionId })
+      body: JSON.stringify({
+        sessionId: sessionId,
+        userId: userId
+      })
     });
 
     if (!response.ok) {
@@ -41,6 +53,13 @@ export async function linkSessionToUser(accessToken: string): Promise<boolean> {
 
     const result = await response.json();
     console.log("Session linked successfully:", result);
+
+    // Update local session ID to canonical session if it changed
+    if (result.canonicalSessionId && result.canonicalSessionId !== sessionId) {
+      localStorage.setItem(SESSION_KEY, result.canonicalSessionId);
+      console.log("Updated to canonical session:", result.canonicalSessionId);
+    }
+
     return true;
   } catch (error) {
     console.error("Error linking session:", error);
@@ -57,7 +76,6 @@ export function clearSession(): void {
 
 /**
  * Check if a session is currently linked to a user
- * This would require a backend endpoint to check session status
  */
 export async function isSessionLinked(accessToken?: string): Promise<boolean> {
   const sessionId = getCurrentSessionId();
@@ -74,16 +92,15 @@ export async function isSessionLinked(accessToken?: string): Promise<boolean> {
       headers["Authorization"] = `Bearer ${accessToken}`;
     }
 
-    const response = await fetch(`${apiUrl}/api/v1/ai/sessions/status`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ session_id: sessionId })
+    const response = await fetch(`${apiUrl}/api/sessions/${sessionId}`, {
+      method: "GET",
+      headers
     });
 
     if (!response.ok) return false;
 
     const result = await response.json();
-    return result.linked === true;
+    return result.isLinked === true;
   } catch (error) {
     console.error("Error checking session status:", error);
     return false;

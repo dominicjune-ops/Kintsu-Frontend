@@ -8,26 +8,44 @@ Transform career setbacks into golden opportunities with AI-powered career tools
 - **Job Board**: Browse and search approved job listings with real-time filtering
 - **Employer Portal**: Submit job postings for review (with approval workflow)
 - **Contact System**: Contact forms and newsletter subscriptions
+- **AI Chatbot**: Career coaching chatbot with session persistence and user authentication
+- **User Authentication**: Supabase-powered authentication with session linking
 - **Dark Mode**: Full dark mode support with user preferences
 
 ## Tech Stack
 
-- **Frontend**: React + TypeScript + TailwindCSS + Shadcn UI
-- **Backend**: Express + TypeScript
-- **Database**: PostgreSQL (Neon) with Drizzle ORM
-- **Deployment**: Replit
+- **Frontend**: React + TypeScript + TailwindCSS + Shadcn UI + Vite
+- **Backend**: FastAPI + Python (separate repository)
+- **Database**: PostgreSQL (Neon) with Drizzle ORM + Supabase for Auth
+- **Authentication**: Supabase Auth with session linking
+- **Deployment**: Vercel (Frontend) + Render (Backend)
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 20+
-- PostgreSQL database (automatically configured on Replit)
+- Supabase project (for authentication)
+- Backend API deployed (FastAPI on Render/Vercel)
 
 ### Installation
 
 ```bash
 npm install
+```
+
+### Environment Setup
+
+1. Copy the environment template:
+```bash
+cp .env.example .env
+```
+
+2. Fill in your Supabase credentials in `.env`:
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
+VITE_API_URL=https://your-backend-api.vercel.app
 ```
 
 ### Database Setup
@@ -38,40 +56,41 @@ The database schema is automatically synced using Drizzle:
 npm run db:push
 ```
 
-### Seeding Sample Data
-
-To populate the database with sample job postings:
-
-```sql
--- Run this in the database console or using the execute_sql_tool
-INSERT INTO jobs (company_name, role_title, location, is_remote, salary_range, job_description, contact_email, tags, type, status) VALUES
-('TechVision Inc', 'Senior Product Manager', 'San Francisco, CA', false, '$140k - $180k', 'Lead product strategy for our enterprise SaaS platform.', 'hiring@techvision.io', ARRAY['Product', 'SaaS', 'Leadership'], 'Full-time', 'approved'),
-('Startup Labs', 'Frontend Engineer', 'Remote', true, '$120k - $160k', 'Build beautiful, performant user interfaces with React and TypeScript.', 'jobs@startuplabs.com', ARRAY['React', 'TypeScript', 'Remote'], 'Full-time', 'approved'),
-('Analytics Co', 'Data Scientist', 'New York, NY', false, '$130k - $170k', 'Apply machine learning to solve complex business problems.', 'careers@analyticsco.com', ARRAY['Python', 'ML', 'Analytics'], 'Full-time', 'approved'),
-('CloudScale', 'DevOps Engineer', 'Austin, TX', true, '$125k - $165k', 'Build and maintain cloud infrastructure at scale.', 'talent@cloudscale.io', ARRAY['AWS', 'Kubernetes', 'Remote'], 'Full-time', 'approved'),
-('DesignFirst', 'UX Designer', 'Remote', true, '$110k - $145k', 'Design delightful experiences for our mobile and web applications.', 'design@designfirst.com', ARRAY['Figma', 'User Research', 'Remote'], 'Full-time', 'approved')
-ON CONFLICT DO NOTHING;
-```
-
 ### Running the Application
 
 ```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:5000`
+The application will be available at `http://localhost:5173`
 
-## API Endpoints
+## Verification
 
-### Jobs
-- `GET /api/jobs` - List approved jobs (with optional ?search= and ?tags= query params)
-- `GET /api/jobs/:id` - Get job by ID
-- `POST /api/jobs` - Create new job posting (status: pending)
-- `PATCH /api/jobs/:id/status` - Update job status (admin only - requires auth in production)
+Run the comprehensive verification script to ensure all components work:
 
-### Contact & Newsletter
-- `POST /api/contact` - Submit contact inquiry
-- `POST /api/newsletter` - Subscribe to newsletter
+```bash
+npm run verify
+```
+
+This will test:
+- ✅ Anonymous chat functionality
+- ✅ User registration
+- ✅ User login
+- ✅ Session linking
+- ✅ Authenticated chat
+- ✅ Database connectivity
+
+## API Integration
+
+### Chat Endpoints
+- `POST /api/chat` - Send chat message (supports anonymous and authenticated users)
+- `POST /api/link-session` - Link anonymous session to authenticated user
+
+### Authentication Flow
+1. Users can chat anonymously (sessions stored locally)
+2. When users sign up/login, their current session is automatically linked
+3. Authenticated users maintain chat history across devices
+4. Session linking preserves conversation context
 
 ## Project Structure
 
@@ -79,69 +98,64 @@ The application will be available at `http://localhost:5000`
 ├── client/                 # Frontend React application
 │   ├── src/
 │   │   ├── components/    # Reusable UI components
+│   │   │   ├── ChatWidget.tsx    # Main chat interface
+│   │   │   └── AuthExample.tsx   # Authentication demo
+│   │   ├── hooks/
+│   │   │   └── use-auth.ts       # Supabase auth hook
+│   │   ├── lib/
+│   │   │   ├── session-linking.ts # Session linking utilities
+│   │   │   └── utils.ts          # General utilities
 │   │   ├── pages/         # Page components
-│   │   └── lib/           # Utilities and query client
-├── server/                 # Backend Express server
-│   ├── routes.ts          # API routes
-│   └── storage.ts         # Database storage layer
+│   │   └── hooks/         # Custom React hooks
 ├── shared/                 # Shared types and schemas
 │   └── schema.ts          # Drizzle database schema
-└── db/                     # Database configuration
-    └── index.ts           # Drizzle client setup
+├── db/                     # Database configuration
+│   └── index.ts           # Drizzle client setup
+├── verify.js              # Verification script
+└── .env.example           # Environment template
 ```
 
-## Database Schema
+## Authentication Setup
 
-### Jobs Table
-- `id`: UUID (primary key)
-- `company_name`: Company name
-- `role_title`: Job title
-- `location`: Job location
-- `is_remote`: Remote work flag
-- `salary_range`: Salary range
-- `job_description`: Full description
-- `contact_email`: Contact email
-- `company_website`: Company URL (optional)
-- `tags`: Array of tags for filtering
-- `type`: Job type (Full-time, Part-time, etc.)
-- `status`: Approval status (pending, approved, rejected)
-- `created_at`: Timestamp
+### Supabase Configuration
 
-### Contact Inquiries Table
-- `id`: UUID (primary key)
-- `name`: Contact name
-- `email`: Contact email
-- `subject`: Inquiry subject
-- `message`: Inquiry message
-- `created_at`: Timestamp
+1. Create a new Supabase project at https://supabase.com
+2. Go to Authentication > Settings
+3. Configure your site URL and redirect URLs
+4. Copy your project URL and anon key to `.env`
 
-### Newsletter Subscriptions Table
-- `id`: UUID (primary key)
-- `email`: Subscriber email (unique)
-- `created_at`: Timestamp
+### Session Linking
 
-## Production Considerations
+The platform supports seamless session linking:
+- Anonymous users can start chatting immediately
+- When they authenticate, their conversation history is preserved
+- Sessions are linked using JWT tokens and backend validation
 
-### Security
-- **Admin Routes**: The `PATCH /api/jobs/:id/status` route currently has no authentication. In production, implement proper authentication and authorization before deploying.
-- **Rate Limiting**: Consider adding rate limiting to prevent abuse
-- **CORS**: Configure CORS policies appropriately
+## Production Deployment
 
-### Performance
-- **Caching**: Implement caching for approved job listings
-- **Indexing**: Add database indexes on frequently queried columns (tags, status, created_at)
-- **Pagination**: Add pagination to job listings for large datasets
+### Vercel Deployment
 
-### Monitoring
-- Set up error tracking (e.g., Sentry)
-- Monitor database performance
-- Track API usage and response times
+1. Connect your GitHub repository to Vercel
+2. Add environment variables in Vercel dashboard:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+   - `VITE_API_URL`
+3. Deploy automatically on git push
 
-## Environment Variables
+### Backend Requirements
 
-Required environment variables (automatically configured on Replit):
-- `DATABASE_URL`: PostgreSQL connection string
-- `SESSION_SECRET`: Session encryption key
+Ensure your FastAPI backend supports:
+- `/api/chat` endpoint with session management
+- `/api/link-session` endpoint for session linking
+- CORS configuration for your frontend domain
+
+## Security Considerations
+
+- **Authentication**: All sensitive operations require valid Supabase JWT tokens
+- **Session Management**: Sessions are validated on both frontend and backend
+- **CORS**: Properly configured CORS policies
+- **Rate Limiting**: Implement rate limiting on chat endpoints
+- **Data Validation**: All inputs are validated using Zod schemas
 
 ## License
 

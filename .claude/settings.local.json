@@ -16,7 +16,12 @@
       "Bash(dir /s /b *.py)",
       "Bash(python -c:*)",
       "Bash(nslookup:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(timeout 60 bash -c 'while true; do code=$(curl -s -o nul -w \"\"%{http_code}\"\" https://api.kintsu.io/health 2>/dev/null); if [ \"\"$code\"\" = \"\"200\"\" ]; then echo \"\"Service is live!\"\"; exit 0; fi; echo \"\"Waiting... (status: $code)\"\"; sleep 5; done')",
+      "Bash(dir /s /b compliance scripts .githubworkflowscompliance-policy.yml .githubpull_request_template.md)",
+      "Bash(findstr:*)",
+      "Bash(xcopy:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []

@@ -3,6 +3,7 @@ import { pgTable, text, varchar, timestamp, boolean } from "drizzle-orm/pg-core"
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Existing tables...
 export const jobs = pgTable("jobs", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   companyName: text("company_name").notNull(),
