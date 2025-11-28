@@ -1,0 +1,45 @@
+name: 'Compliance Policy Enforcement'
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  opa-policy-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install OPA
+        run: |
+          curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64_static
+          chmod +x opa
+          sudo mv opa /usr/local/bin/
+      - name: Check for destructive changes
+        id: destructive
+        run: |
+          # Example: check for destructive keywords in PR diff
+          git fetch origin ${{ github.base_ref }}
+          git diff origin/${{ github.base_ref }}...HEAD > pr.diff
+          if grep -E 'delete|drop|remove' pr.diff; then
+            echo "::set-output name=destructive::true"
+          else
+            echo "::set-output name=destructive::false"
+          fi
+      - name: Check for audit log entry
+        id: auditlog
+        run: |
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep 'compliance/audit/audit-'; then
+            echo "::set-output name=auditlog::true"
+          else
+            echo "::set-output name=auditlog::false"
+          fi
+      - name: Check for CR approval
+        id: cr
+        run: |
+          if grep -q 'CR Approved' $(find .github/ISSUE_TEMPLATE -name '*change_request*' -print -quit); then
+            echo "::set-output name=cr::true"
+          else
+            echo "::set-output name=cr::false"
+          fi
+      - name: Run OPA Policy
+        run: |
+          echo '{"destructive_action":${{ steps.destructive.outputs.destructive }},"audit_log_present":${{ steps.auditlog.outputs.auditlog }},"cr_approval_present":${{ steps.cr.outputs.cr }}}' > input.json
+          opa eval --format pretty --input input.json -d compliance/policy/audit_cr_enforcement.rego "data.main.allow == true"

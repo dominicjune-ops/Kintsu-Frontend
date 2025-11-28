@@ -1,0 +1,70 @@
+{
+  "summary": "Compliance and documentation cleanup plan for CareerCoach.ai repository.",
+  "generated": "2025-11-25T00:00:00Z",
+  "files": [
+    {
+      "path": "compliance/audit-log-spec.md",
+      "action": "KEEP",
+      "reason": "Defines audit log requirements. Required for compliance and auditability.",
+      "risk_level": "low",
+      "compliance_tags": ["audit", "logging", "immutability", "versioning"],
+      "dependency_impact": "Critical for all audit log implementations."
+    },
+    {
+      "path": "compliance/policies.md",
+      "action": "KEEP",
+      "reason": "Documents compliance policies. Required for regulatory and internal controls.",
+      "risk_level": "low",
+      "compliance_tags": ["policy", "compliance"],
+      "dependency_impact": "Referenced by compliance automation and audits."
+    },
+    {
+      "path": "compliance/change-control-process.md",
+      "action": "KEEP",
+      "reason": "Describes change control process. Required for SOX/SOC2 compliance.",
+      "risk_level": "low",
+      "compliance_tags": ["change-control", "approval", "audit"],
+      "dependency_impact": "Referenced in change management and audit workflows."
+    },
+    {
+      "path": "compliance/governance-model.md",
+      "action": "KEEP",
+      "reason": "Documents governance model. Required for compliance and team alignment.",
+      "risk_level": "low",
+      "compliance_tags": ["governance", "roles", "responsibility"],
+      "dependency_impact": "Referenced in compliance and onboarding."
+    },
+    {
+      "path": "compliance/roles-and-responsibilities.md",
+      "action": "KEEP",
+      "reason": "Defines compliance roles and responsibilities. Required for audit and accountability.",
+      "risk_level": "low",
+      "compliance_tags": ["roles", "responsibility", "audit"],
+      "dependency_impact": "Referenced in compliance, onboarding, and audits."
+    },
+    {
+      "path": "compliance/templates/change-request-template.md",
+      "action": "KEEP",
+      "reason": "Template for change requests. Required for change control and audit trail.",
+      "risk_level": "low",
+      "compliance_tags": ["template", "change-control", "audit"],
+      "dependency_impact": "Used in change management workflows."
+    },
+    {
+      "path": "compliance/templates/audit-entry-template.md",
+      "action": "KEEP",
+      "reason": "Template for audit log entries. Required for consistent audit logging.",
+      "risk_level": "low",
+      "compliance_tags": ["template", "audit", "logging"],
+      "dependency_impact": "Used in audit log automation and reviews."
+    },
+    {
+      "path": "compliance/README.md",
+      "action": "KEEP",
+      "reason": "Index for compliance documentation. Required for navigation and onboarding.",
+      "risk_level": "none",
+      "compliance_tags": ["documentation", "index"],
+      "dependency_impact": "Improves discoverability and onboarding."
+    }
+  ]
+}
