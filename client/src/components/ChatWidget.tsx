@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
 import { TypingIndicator } from "@/components/ui/typing-indicator";
 import { Badge } from "@/components/ui/badge";
+import { getCurrentSessionId } from '../session-linking';
 import { KintoAvatar, type KintoState } from "@/components/kinto/KintoAvatar";
 
 // Backend API types
@@ -66,13 +67,12 @@ export function ChatWidget() {
     }
   }, [messages, isTyping]);
 
-  // Persistent session ID management
+  // Persistent session ID management - uses canonical session ID from localStorage
   const getOrCreateSessionId = () => {
-    const key = "kinto_session_id";
-    let sessionId = localStorage.getItem(key);
+    let sessionId = getCurrentSessionId();
     if (!sessionId) {
       sessionId = generateSessionId();
-      localStorage.setItem(key, sessionId);
+      localStorage.setItem("kinto_session_id", sessionId);
     }
     return sessionId;
   };

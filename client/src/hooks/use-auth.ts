@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js';
-import { linkSessionToUser, isSessionLinked } from '../lib/session-linking';
+import { linkSessionToUser, isSessionLinked } from '../session-linking';
 
 // Supabase configuration
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
