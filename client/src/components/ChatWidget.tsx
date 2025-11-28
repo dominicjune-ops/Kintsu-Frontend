@@ -66,6 +66,17 @@ export function ChatWidget() {
     }
   }, [messages, isTyping]);
 
+  // Persistent session ID management
+  const getOrCreateSessionId = () => {
+    const key = "kinto_session_id";
+    let sessionId = localStorage.getItem(key);
+    if (!sessionId) {
+      sessionId = generateSessionId();
+      localStorage.setItem(key, sessionId);
+    }
+    return sessionId;
+  };
+
   const handleSend = async () => {
     if (!inputValue.trim()) return;
 
@@ -82,10 +93,16 @@ export function ChatWidget() {
     setKintoState("thinking");
 
     try {
-      // Call Python backend API at api.kintsu.io
-      // Production: https://api.kintsu.io/api/v1/ai/chat
-      // Development: Can use local backend if needed
       const apiUrl = import.meta.env.VITE_API_URL || "https://api.kintsu.io";
+      // Gather previous messages for context (exclude welcome message)
+      const conversationContext = messages
+        .filter((msg) => msg.id !== "welcome")
+        .map((msg) => ({
+          sender: msg.sender,
+          content: msg.content,
+          timestamp: msg.timestamp,
+        }));
+
       const response = await fetch(`${apiUrl}/api/v1/ai/chat`, {
         method: "POST",
         headers: {
@@ -94,7 +111,7 @@ export function ChatWidget() {
         body: JSON.stringify({
           message: inputValue,
           coaching_type: "general",
-          session_id: generateSessionId(),
+          session_id: getOrCreateSessionId(),
           context: {
             user_id: "user_demo",
             page: window.location.pathname,
@@ -103,6 +120,7 @@ export function ChatWidget() {
               expertise_level: "intermediate",
               career_goal: "promotion",
             },
+            conversation: conversationContext,
           },
         }),
       });
