@@ -220,7 +220,7 @@ export function ChatWidget() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 50 }}
+            style={{ position: "fixed", bottom: "80px", right: "20px", zIndex: 50 }}
           >
             <Button
               size="icon"
@@ -250,7 +250,7 @@ export function ChatWidget() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             style={{
               position: "fixed",
-              bottom: "20px",
+              bottom: "80px", // Raised to ensure input is visible
               right: "20px",
               width: "420px",
               maxWidth: "calc(100vw - 40px)",
